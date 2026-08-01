@@ -1,6 +1,6 @@
-# Cognizio's Agent skill brdige to your PC
-# Connect any A.i. / LLM providers to your PC via a skill
-## agentic-remote-pc
+# Cognizio's Agent Skill Bridge to your PC
+## Connect and control any A.i. / LLM provider's app, i.e. chatGPT, codex, claude, perplexity, claude code, cursor, cursor cli, and any others with internet & skill capability; remote API access to your PC via a skill.
+### agentic-remote-pc
 
 > Turn any PC — Windows or Linux — into a secure, agent-controllable workstation.
 > One authenticated gateway exposes your real shells **and** a whole fleet of coding-agent CLIs over **REST + MCP**, so cloud agents (ChatGPT, Claude, Cursor, Codex, Gemini) can drive your actual machine from anywhere.
@@ -245,14 +245,20 @@ RUNNER_API_KEY) — full step-by-step for every client in
 
 ## Security
 
-- **Always set `RUNNER_API_KEY`** before exposing the server. Without it, anyone who reaches the URL has full shell access to your machine.
-- The server runs with the permissions of the user/service account that starts it — it can do anything that account can.
-- Add Cloudflare Access (or your relay's auth/TLS) on top of the tunnel for a second auth layer.
-- The task store is in-memory and cleared on restart; `DELETE /tasks` wipes sensitive output.
-- Treat `run_command` and all `*_prompt` tools as destructive: they execute arbitrary commands on your host.
-- If you commit a key by accident, **rotate it** — removing the file does not scrub git history.
+> **Not recommended for production as-is.** This runner gives the account it
+> runs under the ability to execute arbitrary commands on a real host. The
+> built-in model is a single static bearer (RUNNER_API_KEY) over TLS, which is
+> fine for personal, development, and QA use but is **not sufficient for a
+> production or multi-tenant deployment**. Add real security layers before
+> exposing it in any environment that matters.
 
----
+- **Always set `RUNNER_API_KEY`** before exposing the server. Without it, anyone who reaches the URL has full shell access to your machine.
+- The server runs with the permissions of the user/service account that starts it, so it can do anything that account can. Run it under a least-privilege account.
+- **Add an identity layer in front, e.g. OAuth 2.0.** Use Cloudflare Access, an OAuth2 reverse proxy (such as OAuth2-Proxy), or your IdP so access is tied to real identities, short-lived tokens, groups, and MFA, instead of one shared static key. This lets you revoke per-user rather than rotating a single secret.
+- Serve it over TLS only (Cloudflare Tunnel, Caddy with Let's Encrypt, or your relay), and consider mutual TLS for the tunnel hop.
+- Treat `run_command` and all `*_prompt` tools as destructive: they execute arbitrary commands on your host. For production, prefer sandboxing, command allow-listing, and scoped service accounts.
+- The task store is in-memory and cleared on restart; `DELETE /tasks` wipes sensitive output. Be aware command outputs may contain secrets, so avoid exposing task history broadly.
+- If you commit a key by accident, **rotate it** — removing the file does not scrub git history.
 
 ## Configuration
 
