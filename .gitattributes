@@ -1,0 +1,6 @@
+# Git hooks are run by sh; CRLF breaks the shebang on Windows.
+.githooks/* text eol=lf
+
+# The mirrored instruction pair must hash identically on every platform.
+AGENTS.md text eol=lf
+CLAUDE.md text eol=lf

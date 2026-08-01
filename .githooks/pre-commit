@@ -1,0 +1,43 @@
+#!/bin/sh
+# Fail the commit when AGENTS.md and CLAUDE.md drift apart.
+#
+# The two files must stay byte-identical: agent CLIs look up project
+# instructions by filename (Claude Code reads CLAUDE.md, Codex and others read
+# AGENTS.md), so both names have to carry the same content. Editing one and
+# forgetting the other silently gives one toolchain stale instructions.
+#
+# Install: npm run hooks:install   (or: git config core.hooksPath .githooks)
+
+set -e
+
+staged_blob() {
+	git ls-files -s -- "$1" | cut -d' ' -f2
+}
+
+agents=$(staged_blob AGENTS.md)
+claude=$(staged_blob CLAUDE.md)
+
+if [ -z "$agents" ] || [ -z "$claude" ]; then
+	echo "pre-commit: AGENTS.md and CLAUDE.md must both exist and be tracked." >&2
+	[ -z "$agents" ] && echo "  missing from the index: AGENTS.md" >&2
+	[ -z "$claude" ] && echo "  missing from the index: CLAUDE.md" >&2
+	echo "  They are a mirrored pair — removing one breaks instruction loading" >&2
+	echo "  for the agents that look up that filename." >&2
+	exit 1
+fi
+
+if [ "$agents" != "$claude" ]; then
+	echo "pre-commit: AGENTS.md and CLAUDE.md have diverged." >&2
+	echo "  AGENTS.md blob: $agents" >&2
+	echo "  CLAUDE.md blob: $claude" >&2
+	echo >&2
+	echo "  Copy whichever you edited over the other, then restage:" >&2
+	echo "    cp AGENTS.md CLAUDE.md && git add CLAUDE.md" >&2
+	echo "    cp CLAUDE.md AGENTS.md && git add AGENTS.md" >&2
+	echo >&2
+	echo "  Diff of the staged versions (CLAUDE.md -> AGENTS.md):" >&2
+	git diff --no-color "$claude" "$agents" >&2 || true
+	exit 1
+fi
+
+exit 0

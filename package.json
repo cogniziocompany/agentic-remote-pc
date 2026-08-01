@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
-    "smoke": "node e2e/runner-smoke.mjs"
+    "smoke": "node e2e/runner-smoke.mjs",
+    "hooks:install": "git config core.hooksPath .githooks",
+    "prepare": "git config core.hooksPath .githooks || exit 0"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,10 @@
 # AGENTS.md — Project Intelligence
 
-> This file mirrors CLAUDE.md so OpenAI/Codex and Claude agents get the same
-> project intelligence. Keep the two in sync.
+> AGENTS.md and CLAUDE.md are a byte-identical pair: each toolchain looks up
+> project intelligence under its own filename (Claude Code reads CLAUDE.md,
+> Codex and others read AGENTS.md). Edit one, copy it over the other. The
+> pre-commit hook in `.githooks/` fails the commit if they diverge — enable it
+> once per clone with `npm run hooks:install`.
 
 ## What is this?
 
