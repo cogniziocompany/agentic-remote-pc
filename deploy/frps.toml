@@ -1,0 +1,15 @@
+# frp server (frps) — runs on your public VPS.
+# Install: https://github.com/fatedier/frp/releases  (Apache-2.0)
+# Run:   ./frps -c deploy/frps.toml
+#
+# Point a DNS A record for your domain (e.g. pc.yourdomain.com) at the VPS IP.
+
+bindPort = 7000                       # the port frpc connects to
+vhostHTTPSPort = 443                  # HTTPS virtual-host port (front with your TLS cert)
+# auth.token = "long-random-secret"  # set this and mirror it in frpc.toml
+
+# Optional: a dashboard for the relay itself.
+webServer.addr = "0.0.0.0"
+webServer.port = 7500
+# webServer.user = "admin"
+# webServer.password = "change-me"

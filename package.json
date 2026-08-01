@@ -1,0 +1,24 @@
+{
+  "name": "agentic-remote-pc",
+  "version": "2.0.0",
+  "description": "Turn any Windows or Linux PC into a secure, agent-controllable workstation — expose shells and a fleet of coding-agent CLIs over one authenticated REST + MCP gateway, tunneled through Cloudflare or a self-hosted relay.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "smoke": "node e2e/runner-smoke.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cogniziocompany/agentic-remote-pc.git"
+  },
+  "author": "Cognizio Company",
+  "license": "LicenseRef-AGENTIC-REMOTE-PC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "uuid": "^11.1.0",
+    "zod": "^4.4.3"
+  }
+}

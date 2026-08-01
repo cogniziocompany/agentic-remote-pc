@@ -1,0 +1,34 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# agentic-remote-pc — Cloudflare Tunnel Sidecar
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# The shell/agent proxy server runs NATIVELY on the host (not in a container)
+# so it has real access to host shells and coding-agent CLIs.
+#
+# This compose file only runs the Cloudflare Tunnel sidecar that routes your
+# public hostname -> localhost:7334. For a self-hosted alternative (frp,
+# rathole, bore, chisel) see docs/self-hosted-tunnel.md.
+#
+# NOTE: On Windows/Mac, Docker runs in a Linux VM so "localhost" inside the
+# container doesn't reach the host. The tunnel's public hostname must be
+# configured to point to:  http://host.docker.internal:7334
+#
+# USAGE:
+#   1. Start the Node.js server on the host: npm start
+#   2. Start the tunnel sidecar: docker compose up -d
+#
+# ═══════════════════════════════════════════════════════════════════════════
+
+services:
+  # ── Cloudflare Tunnel (connects your public hostname -> host:7334) ───────
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: agentic-remote-pc-tunnel
+    restart: always
+    command: tunnel run
+    env_file:
+      - .env
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

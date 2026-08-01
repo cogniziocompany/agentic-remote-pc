@@ -1,0 +1,3 @@
+name: remote-pc
+display_name: Remote PC (agentic-remote-pc)
+description: Drive a host running agentic-remote-pc over its authenticated MCP runner. Secret-free skill — set your own host URL and key in the MCP config.

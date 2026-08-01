@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "my-pc": {
+      "url": "https://your-host.example.com/mcp",
+      "headers": {
+        "Authorization": "Bearer <RUNNER_API_KEY>"
+      }
+    }
+  }
+}

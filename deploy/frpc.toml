@@ -1,0 +1,23 @@
+# frp client (frpc) — runs ON the host that runs agentic-remote-pc.
+# Install: https://github.com/fatedier/frp/releases
+# Run:   ./frpc -c deploy/frpc.toml
+#
+# This exposes the local runner (localhost:7334) at pc.yourdomain.com.
+
+serverAddr = "YOUR_VPS_IP"
+serverPort = 7000
+# auth.token = "long-random-secret"   # must match frps.toml
+
+[[proxies]]
+name = "agentic-remote-pc"
+type = "https"
+localPort = 7334
+customDomains = ["pc.yourdomain.com"]
+
+# If you prefer raw TCP + your own TLS terminator (Caddy/nginx) in front, use:
+# [[proxies]]
+# name = "agentic-remote-pc-tcp"
+# type = "tcp"
+# localIP = "127.0.0.1"
+# localPort = 7334
+# remotePort = 7334

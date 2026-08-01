@@ -1,0 +1,24 @@
+node_modules/
+.env
+.env.backup
+.mcp.json
+*.log
+.DS_Store
+Thumbs.db
+/data/
+*.pem
+*.key
+*.cert
+
+# Claude Code harness artifacts
+.claude/
+
+# Local scratch / personal artifacts (never ship)
+$tmp/
+kb-article/
+.zdk/
+graphify-out/
+boot-test*.mjs
+# Editor / local runtime artifacts (never ship)
+.vscode/
+logs/

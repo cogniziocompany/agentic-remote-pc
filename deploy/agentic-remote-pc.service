@@ -1,0 +1,24 @@
+[Unit]
+Description=agentic-remote-pc — remote agent runner (REST + MCP)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Change these two lines to match your install location and the node binary path.
+WorkingDirectory=/opt/agentic-remote-pc
+ExecStart=/usr/bin/node src/server.js
+Restart=on-failure
+RestartSec=3
+# Load .env (dotenv reads this from the working directory). Alternatively use
+# an EnvironmentFile= directive pointing at /opt/agentic-remote-pc/.env
+EnvironmentFile=-/opt/agentic-remote-pc/.env
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=read-only
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
