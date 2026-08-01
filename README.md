@@ -260,6 +260,33 @@ RUNNER_API_KEY) — full step-by-step for every client in
 - Treat `run_command` and all `*_prompt` tools as destructive: they execute arbitrary commands on your host. For production, prefer sandboxing, command allow-listing, and scoped service accounts.
 - The task store is in-memory and cleared on restart; `DELETE /tasks` wipes sensitive output. Be aware command outputs may contain secrets, so avoid exposing task history broadly.
 
+### Host permission design: authorize the action, not the machine
+
+An identity layer (OAuth 2.0, Cloudflare Access, your IdP) establishes **who**
+called the host. It does not define **what** that caller may do once the session
+begins. A bearer token, even one issued behind an IdP, hands over a very wide
+authority boundary: the whole machine, for the whole session. This runner
+currently has no host sandboxing or permission model of its own — that gap is
+the reason for the disclosure above, and it is why we do not recommend the
+runner outside development use as-is.
+
+For anything beyond development, we recommend building a configurable host
+sandboxing and permission layer around it, along these lines:
+
+- **Make the first safe operation deliberately boring.** Default a new session
+  to read-only inventory: current diff, working-tree status, active processes —
+  plus a signed receipt of what was read.
+- **Gate writes behind a short-lived capability**, scoped to one working
+  directory, one action class, and an explicit expiry — rather than granting
+  write access for the lifetime of the session.
+- **Treat network access and credential reads as separate capabilities**, not as
+  ambient properties of having a shell.
+- **Emit an inspectable receipt per action**, so the authority actually
+  exercised can be audited after the fact rather than inferred from the token.
+
+Per-action capabilities plus receipts narrow the boundary enough to reason
+about. The remote-control mechanism is useful; the unit of authorization should
+be the action, not the machine.
 
 ## Configuration
 
