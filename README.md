@@ -1,6 +1,7 @@
 # Cognizio's Agent Skill Bridge to your PC
-## Connect and control any A.i. / LLM provider's app, i.e. chatGPT, codex, claude, perplexity, claude code, cursor, cursor cli, and any others with internet & skill capability; remote API access to your PC via a skill.
-### agentic-remote-pc
+## Remote control your PC via your Agent of Choice's skill
+## any A.I. / LLM provider's app, i.e. chatGPT, codex, claude, perplexity, claude code, cursor, cursor cli, and any others with internet & skill creation capable
+
 
 > Turn any PC — Windows or Linux — into a secure, agent-controllable workstation.
 > One authenticated gateway exposes your real shells **and** a whole fleet of coding-agent CLIs over **REST + MCP**, so cloud agents (ChatGPT, Claude, Cursor, Codex, Gemini) can drive your actual machine from anywhere.
@@ -258,7 +259,7 @@ RUNNER_API_KEY) — full step-by-step for every client in
 - Serve it over TLS only (Cloudflare Tunnel, Caddy with Let's Encrypt, or your relay), and consider mutual TLS for the tunnel hop.
 - Treat `run_command` and all `*_prompt` tools as destructive: they execute arbitrary commands on your host. For production, prefer sandboxing, command allow-listing, and scoped service accounts.
 - The task store is in-memory and cleared on restart; `DELETE /tasks` wipes sensitive output. Be aware command outputs may contain secrets, so avoid exposing task history broadly.
-- If you commit a key by accident, **rotate it** — removing the file does not scrub git history.
+
 
 ## Configuration
 
