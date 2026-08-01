@@ -1,4 +1,6 @@
-# agentic-remote-pc
+# Cognizio's Agent skill brdige to your PC
+# Connect any A.i. / LLM providers to your PC via a skill
+## agentic-remote-pc
 
 > Turn any PC — Windows or Linux — into a secure, agent-controllable workstation.
 > One authenticated gateway exposes your real shells **and** a whole fleet of coding-agent CLIs over **REST + MCP**, so cloud agents (ChatGPT, Claude, Cursor, Codex, Gemini) can drive your actual machine from anywhere.
