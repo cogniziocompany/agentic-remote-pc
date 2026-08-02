@@ -79,7 +79,7 @@ export function buildAiderEnv(baseEnv = process.env, model = '') {
   } else {
     const gatewayUrl = baseEnv.LITELLM_BASE_URL || '';
     const gatewayToken = baseEnv.LITELLM_MASTER_KEY || '';
-    if (gatewayUrl) env.OPENAI_API_BASE = gatewayUrl;
+    if (gatewayUrl) env.OPENAI_API_BASE = gatewayUrl.replace(/\/+$/,'') + '/v1';
     if (gatewayToken) env.OPENAI_API_KEY = gatewayToken;
     delete env.ANTHROPIC_API_KEY;
   }

@@ -62,16 +62,21 @@ mcp-session-id required.
 
 ## Direction B - route the runner agent CLIs through the gateway
 
-Aider and OpenCode (invoked via POST /aider and POST /opencode) can use the
-gateway as their LLM backend instead of direct vendor APIs. In the runner .env:
+Aider and OpenCode (invoked via POST /aider and POST /opencode) route through
+the gateway BY DEFAULT when LITELLM_BASE_URL is set - this is the recommended
+setup for the open-source IDE CLIs. In the runner .env:
 
     LITELLM_BASE_URL=https://litellm.yourdomain.com
     LITELLM_MASTER_KEY=<your-gateway-key>
-    AIDER_MODEL=ollama/qwen2.5:32b
-    OPENCODE_MODEL=ollama/qwen2.5:32b
+    # Aider: use the openai/ prefix so it sends <model> to the gateway
+    AIDER_MODEL=openai/gpt-oss:20b
+    # OpenCode: bare model id
+    OPENCODE_MODEL=gpt-oss:20b
 
-When LITELLM_BASE_URL is set, the runner points those CLIs at the gateway
-(OPENAI_API_BASE / LOCAL_ENDPOINT). When unset, each CLI uses its own native
+The runner sets OPENAI_API_BASE=<LITELLM_BASE_URL>/v1 and OPENAI_API_KEY=<key>
+for Aider, and LOCAL_ENDPOINT=<LITELLM_BASE_URL>/v1 for OpenCode. Pick a model
+your gateway serves (GET <LITELLM_BASE_URL>/v1/models). When LITELLM_BASE_URL is
+unset, each CLI uses its own native configuration - nothing is hardcoded.
 configuration - nothing is hardcoded.
 
 ## Other MCP-aware gateways / routers
