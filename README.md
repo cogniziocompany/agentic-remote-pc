@@ -6,6 +6,8 @@
 > Turn any PC — Windows or Linux — into a secure, agent-controllable workstation.
 > One authenticated gateway exposes your real shells **and** a whole fleet of coding-agent CLIs over **REST + MCP**, so cloud agents (ChatGPT, Claude, Cursor, Codex, Gemini) can drive your actual machine from anywhere.
 
+> ***Launched Aug 1, 2026*** - read the launch post: https://cognizio.company/blog/agentic-remote-pc.html | share feedback in the pinned discussion: https://github.com/cogniziocompany/agentic-remote-pc/discussions/1
+
 Most AI coding agents live locked in the cloud or a single IDE. **agentic-remote-pc** is the missing remote-control layer for agentic coding: bring-your-own-agent, bring-your-own-PC. Run real commands on real hardware, chain one agent's output into another, and let a cloud model orchestrate a local fleet — through one bearer-protected endpoint you control.
 
 ```text
