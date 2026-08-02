@@ -382,7 +382,7 @@ export async function runAider({ prompt, cwd, model, files, correlationId, chain
   if (!prompt) throw new ValidationError('prompt is required');
 
   const resolvedModel = model || process.env.AIDER_MODEL || '';
-  const args = ['--message', prompt];
+  const args = ['--message', prompt, '--no-git', '--yes'];
   if (resolvedModel) args.push('--model', resolvedModel);
   if (files && files.length) args.push(...files);
 
@@ -422,7 +422,7 @@ export async function runOpencode({ prompt, cwd, model, files, correlationId, ch
   if (!prompt) throw new ValidationError('prompt is required');
 
   const resolvedModel = model || process.env.OPENCODE_MODEL || '';
-  const args = ['--prompt', prompt];
+  const args = ['run', prompt];
   if (resolvedModel) args.push('--model', resolvedModel);
   if (files && files.length) args.push(...files);
 
