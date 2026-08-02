@@ -60,24 +60,45 @@ version MCP docs and switch the type/header keys accordingly. The runner itself
 is transport-stable: stateless Streamable HTTP, JSON responses, no
 mcp-session-id required.
 
-## Direction B - route the runner agent CLIs through the gateway
+## Direction B - route the open-source IDE CLIs through the gateway (default)
 
 Aider and OpenCode (invoked via POST /aider and POST /opencode) route through
-the gateway BY DEFAULT when LITELLM_BASE_URL is set - this is the recommended
-setup for the open-source IDE CLIs. In the runner .env:
+the gateway BY DEFAULT - the recommended setup for the open-source IDE CLIs.
+The runner wires the env; OpenCode also needs a provider entry in its config.
+
+1) Runner .env (both CLIs):
 
     LITELLM_BASE_URL=https://litellm.yourdomain.com
     LITELLM_MASTER_KEY=<your-gateway-key>
-    # Aider: use the openai/ prefix so it sends <model> to the gateway
+    # Aider: openai/ prefix so it sends <model> to the gateway
     AIDER_MODEL=openai/gpt-oss:20b
-    # OpenCode: bare model id
-    OPENCODE_MODEL=gpt-oss:20b
+    # OpenCode: provider/model (provider id from the opencode config below)
+    OPENCODE_MODEL=litellm/gpt-oss:20b
 
-The runner sets OPENAI_API_BASE=<LITELLM_BASE_URL>/v1 and OPENAI_API_KEY=<key>
-for Aider, and LOCAL_ENDPOINT=<LITELLM_BASE_URL>/v1 for OpenCode. Pick a model
-your gateway serves (GET <LITELLM_BASE_URL>/v1/models). When LITELLM_BASE_URL is
-unset, each CLI uses its own native configuration - nothing is hardcoded.
-configuration - nothing is hardcoded.
+The runner sets OPENAI_API_BASE=<LITELLM_BASE_URL>/v1 + OPENAI_API_KEY=<key>
+for Aider, and invokes Aider headless with --no-git --yes (so it completes
+without git/commit prompts). Pick a model your gateway serves
+(GET <LITELLM_BASE_URL>/v1/models).
+
+2) OpenCode provider config (~/.config/opencode/opencode.json on the host):
+
+    {
+      "$schema": "https://opencode.ai/config.json",
+      "provider": {
+        "litellm": {
+          "npm": "@ai-sdk/openai-compatible",
+          "name": "LiteLLM",
+          "options": { "baseURL": "https://litellm.yourdomain.com/v1", "apiKey": "<your-gateway-key>" },
+          "models": { "gpt-oss:20b": { "name": "gpt-oss:20b" } }
+        }
+      },
+      "model": "litellm/gpt-oss:20b"
+    }
+
+opencode auto-installs @ai-sdk/openai-compatible. OPENCODE_MODEL=litellm/<model>
+tells the runner to pass -m litellm/<model>; the provider id ("litellm") must
+match the key in "provider" above. When LITELLM_BASE_URL is unset, each CLI
+uses its own native configuration - nothing is hardcoded.
 
 ## Other MCP-aware gateways / routers
 
